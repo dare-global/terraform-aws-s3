@@ -132,9 +132,16 @@ variable "lifecycle_rules" {
   default     = []
 }
 
+variable "enable_website_configuration" {
+  type        = bool
+  description = "Whether to enable website configuration for the bucket"
+  default     = false
+}
+
 variable "index_document" {
-  description = "The name of the index document for the website"
   type        = string
+  description = "The name of the index document for the website"
+  default     = "index.html"
 }
 
 variable "error_document" {

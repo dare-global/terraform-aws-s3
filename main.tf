@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "bucket" {
+resource "aws_s3_bucket" "main" {
   bucket        = var.use_bucket_prefix ? null : var.bucket_name
   bucket_prefix = var.use_bucket_prefix ? var.bucket_prefix : null
 
@@ -7,15 +7,15 @@ resource "aws_s3_bucket" "bucket" {
   tags                = var.tags
 }
 
-resource "aws_s3_bucket_ownership_controls" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
+resource "aws_s3_bucket_ownership_controls" "main" {
+  bucket = aws_s3_bucket.main.id
   rule {
     object_ownership = var.object_ownership
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
+resource "aws_s3_bucket_public_access_block" "main" {
+  bucket = aws_s3_bucket.main.id
 
   block_public_acls       = var.block_public_acls
   block_public_policy     = var.block_public_policy
@@ -23,8 +23,8 @@ resource "aws_s3_bucket_public_access_block" "bucket" {
   restrict_public_buckets = var.restrict_public_buckets
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -35,31 +35,31 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "bucket" {
+resource "aws_s3_bucket_versioning" "main" {
   count  = var.versioning == "Enabled" ? 1 : 0
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.main.id
 
   versioning_configuration {
     status = var.versioning
   }
 }
 
-resource "aws_s3_bucket_policy" "bucket" {
+resource "aws_s3_bucket_policy" "main" {
   count  = var.configure_policy ? 1 : 0
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.main.id
   policy = var.bucket_policy
 }
 
-resource "aws_s3_bucket_logging" "bucket" {
+resource "aws_s3_bucket_logging" "main" {
   count         = var.logging_enabled ? 1 : 0
-  bucket        = aws_s3_bucket.bucket.id
+  bucket        = aws_s3_bucket.main.id
   target_bucket = var.logging_bucket_name
-  target_prefix = "${aws_s3_bucket.bucket.id}/"
+  target_prefix = "${aws_s3_bucket.main.id}/"
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "bucket" {
+resource "aws_s3_bucket_lifecycle_configuration" "main" {
   count  = var.enable_lifecycle ? 1 : 0
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.main.id
 
   dynamic "rule" {
     for_each = var.lifecycle_rules
@@ -89,8 +89,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "bucket" {
   }
 }
 
-resource "aws_s3_bucket_website_configuration" "website" {
-  bucket = aws_s3_bucket.bucket.id
+resource "aws_s3_bucket_website_configuration" "main" {
+  count  = var.enable_website_configuration ? 1 : 0
+  bucket = aws_s3_bucket.main.id
 
   index_document {
     suffix = var.index_document
