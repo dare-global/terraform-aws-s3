@@ -19,7 +19,7 @@ module "s3_bucket" {
   bucket_name         = "sample-test-bucket"
   versioning          = "Enabled"
   logging_enabled     = true
-  logging_bucket_name = "sample-logging-test-kumaryts"
+  logging_bucket_name = "sample-logging-test"
   enable_lifecycle    = "true"
   lifecycle_rules = [
     {
