@@ -1,6 +1,18 @@
+variable "use_bucket_prefix" {
+  type        = bool
+  description = "whether to use bucket prefix for the s3 bucket name"
+  default     = false
+}
+
 variable "bucket_name" {
   type        = string
   description = "Name of the s3 bucket"
+}
+
+variable "bucket_prefix" {
+  type        = string
+  description = "Prefix name of the s3 bucket"
+  default     = null
 }
 
 variable "force_destroy" {

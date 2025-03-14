@@ -1,5 +1,7 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket              = var.bucket_name
+  bucket        = var.use_bucket_prefix ? null : var.bucket_name
+  bucket_prefix = var.use_bucket_prefix ? var.bucket_prefix : null
+
   force_destroy       = var.force_destroy
   object_lock_enabled = var.object_lock_enabled
   tags                = var.tags

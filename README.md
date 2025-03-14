@@ -56,6 +56,7 @@ No modules.
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | block public policy for bucket | `bool` | `"true"` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Name of the s3 bucket | `string` | n/a | yes |
 | <a name="input_bucket_policy"></a> [bucket\_policy](#input\_bucket\_policy) | S3 bucket policy | `string` | `null` | no |
+| <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | Prefix name of the s3 bucket | `string` | `null` | no |
 | <a name="input_configure_policy"></a> [configure\_policy](#input\_configure\_policy) | Whether to define S3 bucket policy | `bool` | `false` | no |
 | <a name="input_enable_lifecycle"></a> [enable\_lifecycle](#input\_enable\_lifecycle) | Whether to define s3 lifecycle rule | `bool` | `false` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Deletes all objects and bucket | `bool` | `false` | no |
@@ -69,6 +70,7 @@ No modules.
 | <a name="input_restrict_public_buckets"></a> [restrict\_public\_buckets](#input\_restrict\_public\_buckets) | restrict public bucket | `bool` | `"true"` | no |
 | <a name="input_sse_algorithm"></a> [sse\_algorithm](#input\_sse\_algorithm) | server side encryption algorithm for bucket | `string` | `"AES256"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to all resources | `map(string)` | `{}` | no |
+| <a name="input_use_bucket_prefix"></a> [use\_bucket\_prefix](#input\_use\_bucket\_prefix) | whether to use bucket prefix for the s3 bucket name | `bool` | `false` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Enable versioning for bucket | `string` | `null` | no |
 
 ## Outputs
