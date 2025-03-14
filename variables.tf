@@ -3,6 +3,18 @@ variable "bucket_name" {
   description = "Name of the s3 bucket"
 }
 
+variable "force_destroy" {
+  type        = bool
+  description = "Deletes all objects and bucket"
+  default     = false
+}
+
+variable "object_lock_enabled" {
+  type        = bool
+  description = "Enable object locking in bucket"
+  default     = false
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to all resources"
   type        = map(string)

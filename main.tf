@@ -1,6 +1,8 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.bucket_name
-  tags   = var.tags
+  bucket              = var.bucket_name
+  force_destroy       = var.force_destroy
+  object_lock_enabled = var.object_lock_enabled
+  tags                = var.tags
 }
 
 resource "aws_s3_bucket_ownership_controls" "bucket" {
@@ -53,7 +55,7 @@ resource "aws_s3_bucket_logging" "bucket" {
   target_prefix = "${aws_s3_bucket.bucket.id}/"
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "bucket-config" {
+resource "aws_s3_bucket_lifecycle_configuration" "bucket" {
   count  = var.enable_lifecycle ? 1 : 0
   bucket = aws_s3_bucket.bucket.id
 
