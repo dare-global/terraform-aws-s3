@@ -5,7 +5,7 @@ Terraform module for provisioning a S3 bucket
 
 ```hcl
 module "s3_bucket" {
-  source  = "dare-global/s3-bucket/aws"
+  source  = "dare-global/s3/aws"
   version = "1.X.X"
 
   bucket_name = "my-bucket"
@@ -14,8 +14,8 @@ module "s3_bucket" {
 
 ## Examples
 
-* [S3](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/)
-
+* [S3-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-bucket/)
+* [S3-website](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-website/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -23,13 +23,13 @@ module "s3_bucket" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.90.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.90.0 |
 
 ## Modules
 
