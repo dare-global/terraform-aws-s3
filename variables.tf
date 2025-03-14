@@ -141,7 +141,7 @@ variable "enable_website_configuration" {
 variable "index_document" {
   type        = string
   description = "The name of the index document for the website"
-  default     = "index.html"
+  default     = null
 }
 
 variable "error_document" {
@@ -154,24 +154,26 @@ variable "redirect_all_requests_to" {
   description = "Redirect all requests to another website"
   type = object({
     host_name = string
-    protocol  = string
+    protocol  = optional(string)
   })
   default = null
 }
 
-variable "routing_rules" {
-  description = "List of routing rules for the website (optional)"
+variable "routing_rule" {
   type = list(object({
     condition = object({
-      http_error_code_returned_equals = string
-      key_prefix_equals               = string
+      http_error_code_returned_equals = optional(string)
+      key_prefix_equals               = optional(string)
     })
     redirect = object({
-      host_name               = string
-      http_redirect_code      = string
-      protocol                = string
-      replace_key_prefix_with = string
+      host_name               = optional(string)
+      http_redirect_code      = optional(string)
+      protocol                = optional(string)
+      replace_key_prefix_with = optional(string)
+      replace_key_with        = optional(string)
     })
   }))
-  default = []
+  description = "Routing rule configuration for website"
+  default     = []
 }
+

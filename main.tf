@@ -81,8 +81,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
       dynamic "noncurrent_version_transition" {
         for_each = rule.value.transitions != null ? rule.value.transitions : []
         content {
-          noncurrent_days = transition.value.days
-          storage_class   = transition.value.storage_class
+          noncurrent_days = noncurrent_version_transition.value.days
+          storage_class   = noncurrent_version_transition.value.storage_class
         }
       }
     }
@@ -93,38 +93,42 @@ resource "aws_s3_bucket_website_configuration" "main" {
   count  = var.enable_website_configuration ? 1 : 0
   bucket = aws_s3_bucket.main.id
 
-  index_document {
-    suffix = var.index_document
-  }
-
   dynamic "error_document" {
-    for_each = var.error_document != null ? [var.error_document] : []
+    for_each = var.error_document != null && var.redirect_all_requests_to == null ? [var.error_document] : []
     content {
       key = error_document.value
     }
   }
 
+  dynamic "index_document" {
+    for_each = var.index_document != null && var.redirect_all_requests_to == null ? [var.index_document] : []
+    content {
+      suffix = index_document.value
+    }
+  }
+
   dynamic "redirect_all_requests_to" {
-    for_each = var.redirect_all_requests_to != null ? [var.redirect_all_requests_to] : []
+    for_each = var.redirect_all_requests_to != null && var.index_document == null ? [var.redirect_all_requests_to] : []
     content {
       host_name = redirect_all_requests_to.value.host_name
       protocol  = redirect_all_requests_to.value.protocol
     }
   }
 
-  dynamic "routing_rules" {
-    for_each = length(var.routing_rules) > 0 ? var.routing_rules : []
+  dynamic "routing_rule" {
+    for_each = length(var.routing_rule) > 0 && var.redirect_all_requests_to == null ? var.routing_rule : []
     content {
       condition {
-        http_error_code_returned_equals = routing_rules.value.condition.http_error_code_returned_equals
-        key_prefix_equals               = routing_rules.value.condition.key_prefix_equals
+        http_error_code_returned_equals = lookup(routing_rule.value.condition, "http_error_code_returned_equals", null)
+        key_prefix_equals               = lookup(routing_rule.value.condition, "key_prefix_equals", null)
       }
 
       redirect {
-        host_name               = routing_rules.value.redirect.host_name
-        http_redirect_code      = routing_rules.value.redirect.http_redirect_code
-        protocol                = routing_rules.value.redirect.protocol
-        replace_key_prefix_with = routing_rules.value.redirect.replace_key_prefix_with
+        host_name               = lookup(routing_rule.value.redirect, "host_name", null)
+        http_redirect_code      = lookup(routing_rule.value.redirect, "http_redirect_code", null)
+        protocol                = lookup(routing_rule.value.redirect, "protocol", null)
+        replace_key_prefix_with = lookup(routing_rule.value.redirect, "replace_key_prefix_with", null)
+        replace_key_with        = lookup(routing_rule.value.redirect, "replace_key_with", null)
       }
     }
   }

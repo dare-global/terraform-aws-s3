@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 module "s3_bucket" {
-  source = "../"
+  source = "../../"
 
   bucket_name         = "sample-test-bucket-ekjhgfhkjedbfiewgncb"
   versioning          = "Enabled"
