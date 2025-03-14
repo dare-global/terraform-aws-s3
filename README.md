@@ -5,7 +5,8 @@ Terraform module for provisioning a S3 bucket
 
 ```hcl
 module "s3_bucket" {
-  source  = "git@github.com/dare-global/terraform-aws-s3.git?ref=main"
+  source  = "dare-global/s3-bucket/aws"
+  version = "1.X.X"
 
   bucket_name = "my-bucket"
 }
@@ -87,6 +88,7 @@ See LICENSE file for full details.
 ## Maintainers
 
 * [Anish Kumar](https://github.com/anishkumarait)
+* [Marcin Cuber](https://github.com/marcincuber)
 
 ## Pre-commit hooks
 
