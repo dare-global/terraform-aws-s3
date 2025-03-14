@@ -69,6 +69,12 @@ variable "sse_algorithm" {
   default     = "AES256"
 }
 
+variable "enable_bucket_key" {
+  type        = bool
+  description = "Enable bucket key"
+  default     = false
+}
+
 variable "kms_key_id" {
   type        = string
   description = "KMS key arn to encrypt s3 bucket if sse algorith is aws:kms"
@@ -124,4 +130,41 @@ variable "lifecycle_rules" {
   }))
   description = "lifecycle rule for objects"
   default     = []
+}
+
+variable "index_document" {
+  description = "The name of the index document for the website"
+  type        = string
+}
+
+variable "error_document" {
+  description = "The name of the error document for the website"
+  type        = string
+  default     = null
+}
+
+variable "redirect_all_requests_to" {
+  description = "Redirect all requests to another website"
+  type = object({
+    host_name = string
+    protocol  = string
+  })
+  default = null
+}
+
+variable "routing_rules" {
+  description = "List of routing rules for the website (optional)"
+  type = list(object({
+    condition = object({
+      http_error_code_returned_equals = string
+      key_prefix_equals               = string
+    })
+    redirect = object({
+      host_name               = string
+      http_redirect_code      = string
+      protocol                = string
+      replace_key_prefix_with = string
+    })
+  }))
+  default = []
 }
