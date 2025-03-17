@@ -13,7 +13,7 @@ output "webiste_domain" {
   description = "The domain of the website endpoint."
 }
 
-output "website_endpoint " {
+output "website_endpoint" {
   value       = aws_s3_bucket_website_configuration.main.website_endpoint
   description = "Website Endpoint."
 }

@@ -87,7 +87,7 @@ No modules.
 | <a name="output_bucket_arn"></a> [bucket\_arn](#output\_bucket\_arn) | The Amazon Resource Name (ARN) of the created S3 bucket. |
 | <a name="output_bucket_id"></a> [bucket\_id](#output\_bucket\_id) | The id/name of the created S3 bucket. |
 | <a name="output_webiste_domain"></a> [webiste\_domain](#output\_webiste\_domain) | The domain of the website endpoint. |
-| <a name="output_website_endpoint "></a> [website\_endpoint ](#output\_website\_endpoint ) | Website Endpoint. |
+| <a name="output_website_endpoint"></a> [website\_endpoint](#output\_website\_endpoint) | Website Endpoint. |
 <!-- END_TF_DOCS -->
 
 ## License
