@@ -16,12 +16,11 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name         = "sample-test-bucket-ekjhgfhkjedbfiewgncb"
-  versioning          = "Enabled"
-  logging_enabled     = true
-  logging_bucket_name = "sample-logging-test-kumaryts"
-  enable_lifecycle    = "true"
-  bucket_policy       = "abc"
+  bucket_name     = "sample-test-bucket-ekjhgfhkjedbfiewgncb"
+  versioning      = "Enabled"
+  logging_enabled = true
+  # logging_bucket_name = "sample-logging-test-kumaryts"
+  bucket_policy = "abc"
   lifecycle_rules = [
     {
       id              = "log"

@@ -70,7 +70,7 @@ resource "aws_s3_bucket_logging" "main" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main" {
-  count  = var.enable_lifecycle ? 1 : 0
+  count  = length(var.lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.main.id
 
   dynamic "rule" {
@@ -97,12 +97,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
           storage_class   = noncurrent_version_transition.value.storage_class
         }
       }
-    }
-  }
-  lifecycle {
-    precondition {
-      condition     = length(var.lifecycle_rules) > 0
-      error_message = "When 'enable_lifecycle' is true then 'lifecycle_rules' attribute is required."
     }
   }
 }

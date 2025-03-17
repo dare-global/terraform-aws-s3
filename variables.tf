@@ -111,12 +111,6 @@ variable "logging_bucket_name" {
   default     = null
 }
 
-variable "enable_lifecycle" {
-  type        = bool
-  description = "Whether to define s3 lifecycle rule"
-  default     = false
-}
-
 variable "lifecycle_rules" {
   type = list(object({
     id              = string
