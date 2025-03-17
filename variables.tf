@@ -128,7 +128,7 @@ variable "lifecycle_rules" {
       storage_class = string
     })))
   }))
-  description = "lifecycle rule for objects"
+  description = "lifecycle rule for objects transition to different storage classes"
   default     = []
 }
 

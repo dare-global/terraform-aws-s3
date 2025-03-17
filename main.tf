@@ -48,6 +48,12 @@ resource "aws_s3_bucket_policy" "main" {
   count  = var.configure_policy ? 1 : 0
   bucket = aws_s3_bucket.main.id
   policy = var.bucket_policy
+  lifecycle {
+    precondition {
+      condition     = var.configure_policy == false || var.bucket_policy != null
+      error_message = "When 'configure_policy' is true then 'bucket_policy' attribute is required."
+    }
+  }
 }
 
 resource "aws_s3_bucket_logging" "main" {
@@ -55,6 +61,12 @@ resource "aws_s3_bucket_logging" "main" {
   bucket        = aws_s3_bucket.main.id
   target_bucket = var.logging_bucket_name
   target_prefix = "${aws_s3_bucket.main.id}/"
+  lifecycle {
+    precondition {
+      condition     = var.logging_enabled == false || var.logging_bucket_name != null
+      error_message = "When 'logging_enabled' is true then 'logging_bucket_name' attribute is required."
+    }
+  }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main" {
@@ -85,6 +97,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
           storage_class   = noncurrent_version_transition.value.storage_class
         }
       }
+    }
+  }
+  lifecycle {
+    precondition {
+      condition     = var.enable_lifecycle == false || length(var.lifecycle_rules) > 0
+      error_message = "When 'enable_lifecycle' is true then 'lifecycle_rules' attribute is required."
     }
   }
 }
@@ -130,6 +148,22 @@ resource "aws_s3_bucket_website_configuration" "main" {
         replace_key_prefix_with = lookup(routing_rule.value.redirect, "replace_key_prefix_with", null)
         replace_key_with        = lookup(routing_rule.value.redirect, "replace_key_with", null)
       }
+    }
+  }
+  lifecycle {
+    precondition {
+      condition = var.enable_website_configuration == false || (
+        (
+          (var.index_document != null && var.redirect_all_requests_to == null) ||
+          (var.index_document == null && var.redirect_all_requests_to != null)
+        ) &&
+        (
+          (length(var.routing_rule) == 0 || var.redirect_all_requests_to == null) &&
+          (var.error_document == null || var.redirect_all_requests_to == null)
+        ) ||
+        (var.error_document != null && length(var.routing_rule) > 0 && var.redirect_all_requests_to == null)
+      )
+      error_message = "When 'enable_website_configuration' is true, either 'index_document' or 'redirect_all_requests_to' must be provided, but not both. 'error_document' and 'index_document' be used with 'routing_rules' when 'redirect_all_requests_to' is not specified."
     }
   }
 }

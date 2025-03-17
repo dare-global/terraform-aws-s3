@@ -67,7 +67,7 @@ No modules.
 | <a name="input_ignore_public_acls"></a> [ignore\_public\_acls](#input\_ignore\_public\_acls) | ignore public acls for bucket | `bool` | `"true"` | no |
 | <a name="input_index_document"></a> [index\_document](#input\_index\_document) | The name of the index document for the website | `string` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS key arn to encrypt s3 bucket if sse algorith is aws:kms | `string` | `null` | no |
-| <a name="input_lifecycle_rules"></a> [lifecycle\_rules](#input\_lifecycle\_rules) | lifecycle rule for objects | <pre>list(object({<br/>    id              = string<br/>    status          = string<br/>    prefix          = string<br/>    expiration_days = optional(number)<br/>    transitions = optional(list(object({<br/>      days          = number<br/>      storage_class = string<br/>    })))<br/>  }))</pre> | `[]` | no |
+| <a name="input_lifecycle_rules"></a> [lifecycle\_rules](#input\_lifecycle\_rules) | lifecycle rule for objects transition to different storage classes | <pre>list(object({<br/>    id              = string<br/>    status          = string<br/>    prefix          = string<br/>    expiration_days = optional(number)<br/>    transitions = optional(list(object({<br/>      days          = number<br/>      storage_class = string<br/>    })))<br/>  }))</pre> | `[]` | no |
 | <a name="input_logging_bucket_name"></a> [logging\_bucket\_name](#input\_logging\_bucket\_name) | Destination bucket name to store S3 access logs | `string` | `null` | no |
 | <a name="input_logging_enabled"></a> [logging\_enabled](#input\_logging\_enabled) | Enable logging | `bool` | `false` | no |
 | <a name="input_object_lock_enabled"></a> [object\_lock\_enabled](#input\_object\_lock\_enabled) | Enable object locking in bucket | `bool` | `false` | no |
@@ -86,8 +86,8 @@ No modules.
 |------|-------------|
 | <a name="output_bucket_arn"></a> [bucket\_arn](#output\_bucket\_arn) | The Amazon Resource Name (ARN) of the created S3 bucket. |
 | <a name="output_bucket_id"></a> [bucket\_id](#output\_bucket\_id) | The id/name of the created S3 bucket. |
-| <a name="output_webiste_domain"></a> [webiste\_domain](#output\_webiste\_domain) | The domain of the website endpoint. |
-| <a name="output_website_endpoint"></a> [website\_endpoint](#output\_website\_endpoint) | Website Endpoint. |
+| <a name="output_website_domain"></a> [website\_domain](#output\_website\_domain) | The domain of the S3 bucket website |
+| <a name="output_website_endpoint"></a> [website\_endpoint](#output\_website\_endpoint) | The website endpoint of the S3 bucket |
 <!-- END_TF_DOCS -->
 
 ## License

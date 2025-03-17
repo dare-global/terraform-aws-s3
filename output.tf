@@ -8,12 +8,12 @@ output "bucket_arn" {
   description = "The Amazon Resource Name (ARN) of the created S3 bucket."
 }
 
-output "webiste_domain" {
-  value       = aws_s3_bucket_website_configuration.main[0].website_domain
-  description = "The domain of the website endpoint."
+output "website_domain" {
+  value       = var.enable_website_configuration ? aws_s3_bucket_website_configuration.main[0].website_domain : null
+  description = "The domain of the S3 bucket website"
 }
 
 output "website_endpoint" {
-  value       = aws_s3_bucket_website_configuration.main[0].website_endpoint
-  description = "Website Endpoint."
+  value       = var.enable_website_configuration ? aws_s3_bucket_website_configuration.main[0].website_endpoint : null
+  description = "The website endpoint of the S3 bucket"
 }
