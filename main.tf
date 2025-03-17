@@ -50,7 +50,7 @@ resource "aws_s3_bucket_policy" "main" {
   policy = var.bucket_policy
   lifecycle {
     precondition {
-      condition     = var.configure_policy == false || var.bucket_policy != null
+      condition     = !var.configure_policy || var.bucket_policy != null
       error_message = "When 'configure_policy' is true then 'bucket_policy' attribute is required."
     }
   }
@@ -63,7 +63,7 @@ resource "aws_s3_bucket_logging" "main" {
   target_prefix = "${aws_s3_bucket.main.id}/"
   lifecycle {
     precondition {
-      condition     = var.logging_enabled == false || var.logging_bucket_name != null
+      condition     = !var.logging_enabled || var.logging_bucket_name != null
       error_message = "When 'logging_enabled' is true then 'logging_bucket_name' attribute is required."
     }
   }
@@ -101,7 +101,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
   }
   lifecycle {
     precondition {
-      condition     = var.enable_lifecycle == false || length(var.lifecycle_rules) > 0
+      condition     = !var.enable_lifecycle || length(var.lifecycle_rules) > 0
       error_message = "When 'enable_lifecycle' is true then 'lifecycle_rules' attribute is required."
     }
   }
@@ -152,7 +152,7 @@ resource "aws_s3_bucket_website_configuration" "main" {
   }
   lifecycle {
     precondition {
-      condition = var.enable_website_configuration == false || (
+      condition = !var.enable_website_configuration || (
         (
           (var.index_document != null && var.redirect_all_requests_to == null) ||
           (var.index_document == null && var.redirect_all_requests_to != null)
