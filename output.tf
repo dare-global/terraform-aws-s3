@@ -9,11 +9,11 @@ output "bucket_arn" {
 }
 
 output "webiste_domain" {
-  value       = aws_s3_bucket_website_configuration.main.website_domain
+  value       = aws_s3_bucket_website_configuration.main[0].website_domain
   description = "The domain of the website endpoint."
 }
 
 output "website_endpoint" {
-  value       = aws_s3_bucket_website_configuration.main.website_endpoint
+  value       = aws_s3_bucket_website_configuration.main[0].website_endpoint
   description = "Website Endpoint."
 }
