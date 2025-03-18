@@ -128,7 +128,7 @@ resource "aws_s3_bucket_website_configuration" "main" {
   }
 
   dynamic "routing_rule" {
-    for_each = length(var.routing_rule) > 0 && var.redirect_all_requests_to == null ? var.routing_rule : []
+    for_each = length(var.routing_rule) > 0 && var.redirect_all_requests_to == null && var.routing_rules == null ? var.routing_rule : []
     content {
       condition {
         http_error_code_returned_equals = lookup(routing_rule.value.condition, "http_error_code_returned_equals", null)
@@ -144,21 +144,8 @@ resource "aws_s3_bucket_website_configuration" "main" {
       }
     }
   }
-  lifecycle {
-    precondition {
-      condition = (
-        (
-          (var.index_document != null && var.redirect_all_requests_to == null) ||
-          (var.index_document == null && var.redirect_all_requests_to != null)
-        ) &&
-        (
-          (length(var.routing_rule) == 0 || var.redirect_all_requests_to == null) &&
-          (var.error_document == null || var.redirect_all_requests_to == null)
-        ) ||
-        (var.error_document != null && length(var.routing_rule) > 0 && var.redirect_all_requests_to == null)
-      )
-      error_message = "When 'enable_website_configuration' is true, either 'index_document' or 'redirect_all_requests_to' must be provided, but not both. 'error_document' and 'index_document' be used with 'routing_rules' when 'redirect_all_requests_to' is not specified."
-    }
-  }
+
+  routing_rules = length(var.routing_rules) > 0 && var.redirect_all_requests_to == null && var.routing_rule == null ? var.routing_rules : ""
+
 }
 

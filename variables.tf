@@ -122,7 +122,7 @@ variable "lifecycle_rules" {
       storage_class = string
     })))
   }))
-  description = "lifecycle rule for objects transition to different storage classes"
+  description = "lifecycle rules for objects transition to different storage classes"
   default     = []
 }
 
@@ -169,5 +169,11 @@ variable "routing_rule" {
   }))
   description = "Routing rule configuration for website"
   default     = []
+}
+
+variable "routing_rules" {
+  type        = string
+  description = "Routing rules configuration for website"
+  default     = ""
 }
 
