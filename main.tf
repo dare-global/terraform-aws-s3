@@ -48,6 +48,12 @@ resource "aws_s3_bucket_policy" "main" {
   count  = var.configure_policy ? 1 : 0
   bucket = aws_s3_bucket.main.id
   policy = var.bucket_policy
+  lifecycle {
+    precondition {
+      condition     = var.bucket_policy != null
+      error_message = "When 'configure_policy' is true then 'bucket_policy' attribute is required."
+    }
+  }
 }
 
 resource "aws_s3_bucket_logging" "main" {
@@ -55,10 +61,16 @@ resource "aws_s3_bucket_logging" "main" {
   bucket        = aws_s3_bucket.main.id
   target_bucket = var.logging_bucket_name
   target_prefix = "${aws_s3_bucket.main.id}/"
+  lifecycle {
+    precondition {
+      condition     = var.logging_bucket_name != null
+      error_message = "When 'logging_enabled' is true then 'logging_bucket_name' attribute is required."
+    }
+  }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main" {
-  count  = var.enable_lifecycle ? 1 : 0
+  count  = length(var.lifecycle_rules) > 0 ? 1 : 0
   bucket = aws_s3_bucket.main.id
 
   dynamic "rule" {
@@ -116,7 +128,7 @@ resource "aws_s3_bucket_website_configuration" "main" {
   }
 
   dynamic "routing_rule" {
-    for_each = length(var.routing_rule) > 0 && var.redirect_all_requests_to == null ? var.routing_rule : []
+    for_each = length(var.routing_rule) > 0 && var.redirect_all_requests_to == null && var.routing_rules == null ? var.routing_rule : []
     content {
       condition {
         http_error_code_returned_equals = lookup(routing_rule.value.condition, "http_error_code_returned_equals", null)
@@ -132,5 +144,8 @@ resource "aws_s3_bucket_website_configuration" "main" {
       }
     }
   }
+
+  routing_rules = length(jsondecode(var.routing_rules)) > 0 && var.redirect_all_requests_to == null && var.routing_rule == null ? var.routing_rules : ""
+
 }
 

@@ -19,7 +19,8 @@ module "s3_bucket" {
   bucket_name                  = "sample-test-bucket-ekjhgfhkjedbfiewgncb"
   enable_website_configuration = true
   index_document               = "index.html"
-  error_document               = "error.html"
+  # redirect_all_requests_to = {host_name = "abc", protocol = "https"}
+  error_document = "error.html"
   routing_rule = [
     {
       condition = {
