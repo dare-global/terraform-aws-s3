@@ -116,10 +116,10 @@ variable "lifecycle_rules" {
     id     = string
     status = string
     prefix = string
-    expiration = optional(list(object({
+    expiration = optional(object({
       days                      = number
       newer_noncurrent_versions = optional(number)
-    })))
+    }))
     transitions = optional(list(object({
       days                      = number
       storage_class             = string

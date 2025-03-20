@@ -16,16 +16,19 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name         = "sample-test-bucket"
+  bucket_name         = "sample-test-bucket-kumaryts123"
   versioning          = "Enabled"
   logging_enabled     = true
   logging_bucket_name = "sample-logging-bucket"
   lifecycle_rules = [
     {
-      id              = "log"
-      status          = "Enabled"
-      prefix          = "/"
-      expiration_days = { days = 90 }
+      id     = "log"
+      status = "Enabled"
+      prefix = "/"
+      expiration = {
+        days                      = 90
+        newer_noncurrent_versions = 10
+      }
       transitions = [
         { days = 30, storage_class = "STANDARD_IA" },
         { days = 60, storage_class = "GLACIER" }
