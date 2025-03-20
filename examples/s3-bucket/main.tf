@@ -25,7 +25,7 @@ module "s3_bucket" {
       id              = "log"
       status          = "Enabled"
       prefix          = "/"
-      expiration_days = 90
+      expiration_days = { days = 90 }
       transitions = [
         { days = 30, storage_class = "STANDARD_IA" },
         { days = 60, storage_class = "GLACIER" }

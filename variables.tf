@@ -113,13 +113,17 @@ variable "logging_bucket_name" {
 
 variable "lifecycle_rules" {
   type = list(object({
-    id              = string
-    status          = string
-    prefix          = string
-    expiration_days = optional(number)
+    id     = string
+    status = string
+    prefix = string
+    expiration = optional(list(object({
+      days                      = number
+      newer_noncurrent_versions = optional(number)
+    })))
     transitions = optional(list(object({
-      days          = number
-      storage_class = string
+      days                      = number
+      storage_class             = string
+      newer_noncurrent_versions = optional(number)
     })))
   }))
   description = "lifecycle rules for objects transition to different storage classes"
