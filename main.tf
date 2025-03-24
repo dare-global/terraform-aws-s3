@@ -147,7 +147,7 @@ resource "aws_s3_bucket_website_configuration" "main" {
     }
   }
 
-  routing_rules = length(jsondecode(var.routing_rules)) > 0 && var.redirect_all_requests_to == null && var.routing_rule == null ? var.routing_rules : ""
+  routing_rules = length(var.routing_rules) > 0 && var.redirect_all_requests_to == null && var.routing_rule == null ? var.routing_rules : ""
 
 }
 
