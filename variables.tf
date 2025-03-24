@@ -180,4 +180,3 @@ variable "routing_rules" {
   description = "Routing rules configuration for website"
   default     = ""
 }
-
