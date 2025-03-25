@@ -14,6 +14,44 @@ resource "aws_s3_bucket_ownership_controls" "main" {
   }
 }
 
+resource "aws_s3_bucket_acl" "main" {
+  count      = var.object_ownership != "BucketOwnerEnforced" && var.enable_acl == true ? 1 : 0
+  depends_on = [aws_s3_bucket_ownership_controls.main]
+  bucket     = aws_s3_bucket.main.id
+
+  dynamic "access_control_policy" {
+    for_each = var.access_control_policy != null ? [var.access_control_policy] : []
+    content {
+      owner {
+        id           = access_control_policy.value.owner.id
+        display_name = try(access_control_policy.value.owner.display_name, null)
+      }
+
+      dynamic "grant" {
+        for_each = access_control_policy.value.grant
+        content {
+          grantee {
+            type          = grant.value.grantee.type
+            email_address = try(grant.value.grantee.email_address, null)
+            id            = try(grant.value.grantee.id, null)
+            uri           = try(grant.value.grantee.uri, null)
+          }
+          permission = grant.value.permission
+        }
+      }
+    }
+  }
+
+  acl = var.access_control_policy == null ? var.acl : null
+
+  lifecycle {
+    precondition {
+      condition     = !(var.acl != null && var.access_control_policy != null)
+      error_message = "Only one of acl or access_control_policy should be provided, not both."
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "main" {
   bucket = aws_s3_bucket.main.id
 
@@ -164,13 +202,6 @@ resource "aws_s3_bucket_cors_configuration" "main" {
       expose_headers  = try(cors_rule.value.expose_headers, null)
       max_age_seconds = try(cors_rule.value.max_age_seconds, null)
       id              = try(cors_rule.value.id, null)
-    }
-  }
-
-  lifecycle {
-    precondition {
-      condition     = length(var.cors_rules) > 0
-      error_message = "At least one CORS rule must be defined."
     }
   }
 }

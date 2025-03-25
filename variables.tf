@@ -39,6 +39,38 @@ variable "object_ownership" {
   default     = "BucketOwnerEnforced"
 }
 
+variable "enable_acl" {
+  type        = bool
+  description = "Whether to enable ACL for bucket"
+  default     = false
+}
+
+variable "acl" {
+  type        = string
+  description = "Canned config to apply to the bucket"
+  default     = null
+}
+
+variable "access_control_policy" {
+  type = object({
+    owner = object({
+      id           = string
+      display_name = optional(string)
+    })
+    grant = list(object({
+      grantee = object({
+        type          = string
+        email_address = optional(string)
+        id            = optional(string)
+        uri           = optional(string)
+      })
+      permission = string
+    }))
+  })
+  description = "Access control policy configuration for the bucket"
+  default     = null
+}
+
 variable "block_public_acls" {
   type        = bool
   description = "block public acls for bucket"
