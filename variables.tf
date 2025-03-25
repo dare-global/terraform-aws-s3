@@ -180,3 +180,16 @@ variable "routing_rules" {
   description = "Routing rules configuration for website"
   default     = ""
 }
+
+variable "cors_rules" {
+  description = "List of CORS rules for the S3 bucket"
+  type = list(object({
+    allowed_methods = list(string)
+    allowed_origins = list(string)
+    allowed_headers = optional(list(string), [])
+    expose_headers  = optional(list(string), [])
+    max_age_seconds = optional(number)
+    id              = optional(string)
+  }))
+  default = []
+}

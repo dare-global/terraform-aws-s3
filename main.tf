@@ -151,3 +151,26 @@ resource "aws_s3_bucket_website_configuration" "main" {
 
 }
 
+resource "aws_s3_bucket_cors_configuration" "main" {
+  count  = length(var.cors_rules) > 0 ? 1 : 0
+  bucket = var.bucket_name
+
+  dynamic "cors_rule" {
+    for_each = var.cors_rules
+    content {
+      allowed_methods = cors_rule.value.allowed_methods
+      allowed_origins = cors_rule.value.allowed_origins
+      allowed_headers = try(cors_rule.value.allowed_headers, null)
+      expose_headers  = try(cors_rule.value.expose_headers, null)
+      max_age_seconds = try(cors_rule.value.max_age_seconds, null)
+      id              = try(cors_rule.value.id, null)
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = length(var.cors_rules) > 0
+      error_message = "At least one CORS rule must be defined."
+    }
+  }
+}
