@@ -20,6 +20,7 @@ module "s3_bucket" {
   versioning          = "Enabled"
   logging_enabled     = true
   logging_bucket_name = "sample-logging-bucket"
+  object_ownership    = "BucketOwnerEnforced"
   lifecycle_rules = [
     {
       id     = "log"
