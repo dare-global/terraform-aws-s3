@@ -20,7 +20,7 @@ module "s3_bucket" {
   sqs_notifications = [
     {
       events    = ["s3:ObjectCreated:*"]
-      queue_arn = "arn:aws:sqs:eu-west-2:096445827817:test-queue"
+      queue_arn = "arn:aws:sqs:eu-west-2:1234567890:test-queue"
     }
   ]
 }
