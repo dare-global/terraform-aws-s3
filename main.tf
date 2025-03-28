@@ -247,33 +247,29 @@ resource "aws_s3_bucket_notification" "main" {
 }
 
 resource "aws_s3_access_point" "main" {
-  count = var.enable_access_point ? 1 : 0
+  count = var.enable_access_points ? length(var.access_points) : 0
 
   bucket = var.bucket_name
-  name   = var.access_point_name
+  name   = var.access_points[count.index].name
+
   public_access_block_configuration {
-    block_public_acls       = var.access_point_block_public_acls
-    block_public_policy     = var.access_point_block_public_policy
-    ignore_public_acls      = var.access_point_ignore_public_acls
-    restrict_public_buckets = var.access_point_restrict_public_buckets
-  }
-  dynamic "vpc_configuration" {
-    for_each = var.vpc_id != null ? [1] : []
-    content {
-      vpc_id = var.vpc_id
-    }
+    block_public_acls       = var.access_points[count.index].block_public_acls
+    block_public_policy     = var.access_points[count.index].block_public_policy
+    ignore_public_acls      = var.access_points[count.index].ignore_public_acls
+    restrict_public_buckets = var.access_points[count.index].restrict_public_buckets
   }
 
+  dynamic "vpc_configuration" {
+    for_each = try(var.access_points[count.index].vpc_id, null) != null ? [1] : []
+    content {
+      vpc_id = var.access_points[count.index].vpc_id
+    }
+  }
+  policy = try(var.access_points[count.index].policy, null)
   lifecycle {
     precondition {
-      condition     = var.access_point_name != null
+      condition     = var.access_points[count.index].name != null && var.access_points[count.index].name != ""
       error_message = "Access point name cannot be empty."
     }
   }
-}
-
-resource "aws_s3control_access_point_policy" "main" {
-  count            = var.enable_access_point_policy ? 1 : 0
-  access_point_arn = var.enable_access_point ? aws_s3_access_point.main[0].arn : null
-  policy           = var.access_point_policy
 }

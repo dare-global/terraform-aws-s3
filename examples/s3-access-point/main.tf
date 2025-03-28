@@ -16,23 +16,30 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name                = "sample-test-bucket"
-  enable_access_point        = true
-  access_point_name          = "sample-test"
-  enable_access_point_policy = true
-  access_point_policy = jsonencode({
-    Id = "testAccessPointPolicy"
-    Statement = [
-      {
-        Action = "s3:ListBucket"
-        Effect = "Deny"
-        Principal = {
-          AWS = "*"
-        }
-        Resource = "arn:aws:s3:eu-west-2:1234567890:accesspoint/sample-test"
-        Sid      = "statement1"
-      }
-    ]
-    Version = "2012-10-17"
-  })
+  bucket_name          = "sample-test-bucket"
+  enable_access_points = true
+  access_points = [
+    {
+      name                    = "sample-test"
+      block_public_acls       = false
+      block_public_policy     = true
+      ignore_public_acls      = false
+      restrict_public_buckets = true
+      policy = jsonencode({
+        Id = "testAccessPointPolicy"
+        Statement = [
+          {
+            Action = "s3:ListBucket"
+            Effect = "Deny"
+            Principal = {
+              AWS = "*"
+            }
+            Resource = "arn:aws:s3:eu-west-2:1234567890:accesspoint/sample-test"
+            Sid      = "statement1"
+          }
+        ]
+        Version = "2012-10-17"
+      })
+    }
+  ]
 }

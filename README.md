@@ -55,19 +55,13 @@ No modules.
 | [aws_s3_bucket_server_side_encryption_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_versioning.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
 | [aws_s3_bucket_website_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) | resource |
-| [aws_s3control_access_point_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3control_access_point_policy) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_access_control_policy"></a> [access\_control\_policy](#input\_access\_control\_policy) | Access control policy configuration for the bucket | <pre>object({<br/>    owner = object({<br/>      id           = string<br/>      display_name = optional(string)<br/>    })<br/>    grant = list(object({<br/>      grantee = object({<br/>        type          = string<br/>        email_address = optional(string)<br/>        id            = optional(string)<br/>        uri           = optional(string)<br/>      })<br/>      permission = string<br/>    }))<br/>  })</pre> | `null` | no |
-| <a name="input_access_point_block_public_acls"></a> [access\_point\_block\_public\_acls](#input\_access\_point\_block\_public\_acls) | Block public ACLs for access point | `bool` | `true` | no |
-| <a name="input_access_point_block_public_policy"></a> [access\_point\_block\_public\_policy](#input\_access\_point\_block\_public\_policy) | Block public policy for access point | `bool` | `true` | no |
-| <a name="input_access_point_ignore_public_acls"></a> [access\_point\_ignore\_public\_acls](#input\_access\_point\_ignore\_public\_acls) | Ignore public ACLs for access point | `bool` | `true` | no |
-| <a name="input_access_point_name"></a> [access\_point\_name](#input\_access\_point\_name) | Name for Access point | `string` | `null` | no |
-| <a name="input_access_point_policy"></a> [access\_point\_policy](#input\_access\_point\_policy) | S3 Access point policy | `string` | `null` | no |
-| <a name="input_access_point_restrict_public_buckets"></a> [access\_point\_restrict\_public\_buckets](#input\_access\_point\_restrict\_public\_buckets) | Restrict public buckets for access point | `bool` | `true` | no |
+| <a name="input_access_points"></a> [access\_points](#input\_access\_points) | List of S3 access points | <pre>list(object({<br/>    name                    = string<br/>    block_public_acls       = optional(bool, true)<br/>    block_public_policy     = optional(bool, true)<br/>    ignore_public_acls      = optional(bool, true)<br/>    restrict_public_buckets = optional(bool, true)<br/>    vpc_id                  = optional(string, null)<br/>    policy                  = optional(string, null)<br/>  }))</pre> | `[]` | no |
 | <a name="input_acl"></a> [acl](#input\_acl) | Canned config to apply to the bucket | `string` | `null` | no |
 | <a name="input_block_public_acls"></a> [block\_public\_acls](#input\_block\_public\_acls) | block public acls for bucket | `bool` | `"true"` | no |
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | block public policy for bucket | `bool` | `"true"` | no |
@@ -76,8 +70,7 @@ No modules.
 | <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | Prefix name of the s3 bucket | `string` | `null` | no |
 | <a name="input_configure_policy"></a> [configure\_policy](#input\_configure\_policy) | Whether to define S3 bucket policy | `bool` | `false` | no |
 | <a name="input_cors_rules"></a> [cors\_rules](#input\_cors\_rules) | List of CORS rules for the S3 bucket | <pre>list(object({<br/>    allowed_methods = list(string)<br/>    allowed_origins = list(string)<br/>    allowed_headers = optional(list(string), [])<br/>    expose_headers  = optional(list(string), [])<br/>    max_age_seconds = optional(number)<br/>    id              = optional(string)<br/>  }))</pre> | `[]` | no |
-| <a name="input_enable_access_point"></a> [enable\_access\_point](#input\_enable\_access\_point) | Whether to enable access point for s3 | `bool` | `false` | no |
-| <a name="input_enable_access_point_policy"></a> [enable\_access\_point\_policy](#input\_enable\_access\_point\_policy) | Whether to enable access point policy for s3 | `bool` | `false` | no |
+| <a name="input_enable_access_points"></a> [enable\_access\_points](#input\_enable\_access\_points) | Whether to enable access point for s3 | `bool` | `false` | no |
 | <a name="input_enable_acl"></a> [enable\_acl](#input\_enable\_acl) | Whether to enable ACL for bucket | `bool` | `false` | no |
 | <a name="input_enable_bucket_key"></a> [enable\_bucket\_key](#input\_enable\_bucket\_key) | Enable bucket key | `bool` | `false` | no |
 | <a name="input_enable_s3_notification"></a> [enable\_s3\_notification](#input\_enable\_s3\_notification) | Whether to enable S3 bucket notification | `bool` | `false` | no |
@@ -104,7 +97,6 @@ No modules.
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to all resources | `map(string)` | `{}` | no |
 | <a name="input_use_bucket_prefix"></a> [use\_bucket\_prefix](#input\_use\_bucket\_prefix) | whether to use bucket prefix for the s3 bucket name | `bool` | `false` | no |
 | <a name="input_versioning"></a> [versioning](#input\_versioning) | Enable versioning for bucket | `string` | `null` | no |
-| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC id to assicate with access point | `string` | `null` | no |
 
 ## Outputs
 
