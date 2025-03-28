@@ -69,6 +69,7 @@ No modules.
 | <a name="input_cors_rules"></a> [cors\_rules](#input\_cors\_rules) | List of CORS rules for the S3 bucket | <pre>list(object({<br/>    allowed_methods = list(string)<br/>    allowed_origins = list(string)<br/>    allowed_headers = optional(list(string), [])<br/>    expose_headers  = optional(list(string), [])<br/>    max_age_seconds = optional(number)<br/>    id              = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_enable_acl"></a> [enable\_acl](#input\_enable\_acl) | Whether to enable ACL for bucket | `bool` | `false` | no |
 | <a name="input_enable_bucket_key"></a> [enable\_bucket\_key](#input\_enable\_bucket\_key) | Enable bucket key | `bool` | `false` | no |
+| <a name="input_enable_s3_notification"></a> [enable\_s3\_notification](#input\_enable\_s3\_notification) | Whether to enable S3 bucket notification | `bool` | `false` | no |
 | <a name="input_enable_website_configuration"></a> [enable\_website\_configuration](#input\_enable\_website\_configuration) | Whether to enable website configuration for the bucket | `bool` | `false` | no |
 | <a name="input_error_document"></a> [error\_document](#input\_error\_document) | The name of the error document for the website | `string` | `null` | no |
 | <a name="input_eventbridge"></a> [eventbridge](#input\_eventbridge) | Enable EventBridge notifications | `bool` | `false` | no |

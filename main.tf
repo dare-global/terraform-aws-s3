@@ -207,6 +207,7 @@ resource "aws_s3_bucket_cors_configuration" "main" {
 }
 
 resource "aws_s3_bucket_notification" "main" {
+  count  = var.enable_s3_notification ? 1 : 0
   bucket = var.bucket_name
 
   eventbridge = var.eventbridge
