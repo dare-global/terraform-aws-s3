@@ -273,3 +273,57 @@ variable "sns_notifications" {
   }))
   default = []
 }
+
+variable "enable_access_point" {
+  description = "Whether to enable access point for s3"
+  type        = bool
+  default     = false
+}
+
+variable "access_point_name" {
+  description = "Name for Access point"
+  type        = string
+  default     = null
+}
+
+variable "access_point_block_public_acls" {
+  description = "Block public ACLs for access point"
+  type        = bool
+  default     = true
+}
+
+variable "access_point_block_public_policy" {
+  description = "Block public policy for access point"
+  type        = bool
+  default     = true
+}
+
+variable "access_point_ignore_public_acls" {
+  description = "Ignore public ACLs for access point"
+  type        = bool
+  default     = true
+}
+
+variable "access_point_restrict_public_buckets" {
+  description = "Restrict public buckets for access point"
+  type        = bool
+  default     = true
+}
+
+variable "vpc_id" {
+  description = "VPC id to assicate with access point"
+  type        = string
+  default     = null
+}
+
+variable "enable_access_point_policy" {
+  description = "Whether to enable access point policy for s3"
+  type        = bool
+  default     = false
+}
+
+variable "access_point_policy" {
+  type        = string
+  description = "S3 Access point policy"
+  default     = null
+}
