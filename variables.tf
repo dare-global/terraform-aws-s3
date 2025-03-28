@@ -273,3 +273,23 @@ variable "sns_notifications" {
   }))
   default = []
 }
+
+variable "enable_access_points" {
+  description = "Whether to enable access point for s3"
+  type        = bool
+  default     = false
+}
+
+variable "access_points" {
+  description = "List of S3 access points"
+  type = list(object({
+    name                    = string
+    block_public_acls       = optional(bool, true)
+    block_public_policy     = optional(bool, true)
+    ignore_public_acls      = optional(bool, true)
+    restrict_public_buckets = optional(bool, true)
+    vpc_id                  = optional(string, null)
+    policy                  = optional(string, null)
+  }))
+  default = []
+}
