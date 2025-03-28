@@ -225,3 +225,45 @@ variable "cors_rules" {
   }))
   default = []
 }
+
+variable "eventbridge" {
+  description = "Enable EventBridge notifications"
+  type        = bool
+  default     = false
+}
+
+variable "lambda_notifications" {
+  description = "List of Lambda function notifications"
+  type = list(object({
+    lambda_function_arn = string
+    events              = list(string)
+    filter_prefix       = optional(string)
+    filter_suffix       = optional(string)
+    id                  = optional(string)
+  }))
+  default = []
+}
+
+variable "sqs_notifications" {
+  description = "List of SQS queue notifications"
+  type = list(object({
+    queue_arn     = string
+    events        = list(string)
+    filter_prefix = optional(string)
+    filter_suffix = optional(string)
+    id            = optional(string)
+  }))
+  default = []
+}
+
+variable "sns_notifications" {
+  description = "List of SNS topic notifications"
+  type = list(object({
+    topic_arn     = string
+    events        = list(string)
+    filter_prefix = optional(string)
+    filter_suffix = optional(string)
+    id            = optional(string)
+  }))
+  default = []
+}

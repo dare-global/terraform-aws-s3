@@ -17,6 +17,7 @@ module "s3_bucket" {
 * [s3-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-bucket/)
 * [s3-website](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-website/)
 * [s3-cors] (https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-cors/)
+* [s3-notification] (https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-notification/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -45,6 +46,7 @@ No modules.
 | [aws_s3_bucket_cors_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_cors_configuration) | resource |
 | [aws_s3_bucket_lifecycle_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
 | [aws_s3_bucket_logging.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
+| [aws_s3_bucket_notification.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
 | [aws_s3_bucket_ownership_controls.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
 | [aws_s3_bucket_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
@@ -69,10 +71,12 @@ No modules.
 | <a name="input_enable_bucket_key"></a> [enable\_bucket\_key](#input\_enable\_bucket\_key) | Enable bucket key | `bool` | `false` | no |
 | <a name="input_enable_website_configuration"></a> [enable\_website\_configuration](#input\_enable\_website\_configuration) | Whether to enable website configuration for the bucket | `bool` | `false` | no |
 | <a name="input_error_document"></a> [error\_document](#input\_error\_document) | The name of the error document for the website | `string` | `null` | no |
+| <a name="input_eventbridge"></a> [eventbridge](#input\_eventbridge) | Enable EventBridge notifications | `bool` | `false` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Deletes all objects and bucket | `bool` | `false` | no |
 | <a name="input_ignore_public_acls"></a> [ignore\_public\_acls](#input\_ignore\_public\_acls) | ignore public acls for bucket | `bool` | `"true"` | no |
 | <a name="input_index_document"></a> [index\_document](#input\_index\_document) | The name of the index document for the website | `string` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS key arn to encrypt s3 bucket if sse algorith is aws:kms | `string` | `null` | no |
+| <a name="input_lambda_notifications"></a> [lambda\_notifications](#input\_lambda\_notifications) | List of Lambda function notifications | <pre>list(object({<br/>    lambda_function_arn = string<br/>    events              = list(string)<br/>    filter_prefix       = optional(string)<br/>    filter_suffix       = optional(string)<br/>    id                  = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_lifecycle_rules"></a> [lifecycle\_rules](#input\_lifecycle\_rules) | lifecycle rules for objects transition to different storage classes | <pre>list(object({<br/>    id     = string<br/>    status = string<br/>    prefix = string<br/>    expiration = optional(object({<br/>      days                      = number<br/>      newer_noncurrent_versions = optional(number)<br/>    }))<br/>    transitions = optional(list(object({<br/>      days                      = number<br/>      storage_class             = string<br/>      newer_noncurrent_versions = optional(number)<br/>    })))<br/>  }))</pre> | `[]` | no |
 | <a name="input_logging_bucket_name"></a> [logging\_bucket\_name](#input\_logging\_bucket\_name) | Destination bucket name to store S3 access logs | `string` | `null` | no |
 | <a name="input_logging_enabled"></a> [logging\_enabled](#input\_logging\_enabled) | Enable logging | `bool` | `false` | no |
@@ -82,6 +86,8 @@ No modules.
 | <a name="input_restrict_public_buckets"></a> [restrict\_public\_buckets](#input\_restrict\_public\_buckets) | restrict public bucket | `bool` | `"true"` | no |
 | <a name="input_routing_rule"></a> [routing\_rule](#input\_routing\_rule) | Routing rule configuration for website | <pre>list(object({<br/>    condition = object({<br/>      http_error_code_returned_equals = optional(string)<br/>      key_prefix_equals               = optional(string)<br/>    })<br/>    redirect = object({<br/>      host_name               = optional(string)<br/>      http_redirect_code      = optional(string)<br/>      protocol                = optional(string)<br/>      replace_key_prefix_with = optional(string)<br/>      replace_key_with        = optional(string)<br/>    })<br/>  }))</pre> | `[]` | no |
 | <a name="input_routing_rules"></a> [routing\_rules](#input\_routing\_rules) | Routing rules configuration for website | `string` | `""` | no |
+| <a name="input_sns_notifications"></a> [sns\_notifications](#input\_sns\_notifications) | List of SNS topic notifications | <pre>list(object({<br/>    topic_arn     = string<br/>    events        = list(string)<br/>    filter_prefix = optional(string)<br/>    filter_suffix = optional(string)<br/>    id            = optional(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_sqs_notifications"></a> [sqs\_notifications](#input\_sqs\_notifications) | List of SQS queue notifications | <pre>list(object({<br/>    queue_arn     = string<br/>    events        = list(string)<br/>    filter_prefix = optional(string)<br/>    filter_suffix = optional(string)<br/>    id            = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_sse_algorithm"></a> [sse\_algorithm](#input\_sse\_algorithm) | server side encryption algorithm for bucket | `string` | `"AES256"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to all resources | `map(string)` | `{}` | no |
 | <a name="input_use_bucket_prefix"></a> [use\_bucket\_prefix](#input\_use\_bucket\_prefix) | whether to use bucket prefix for the s3 bucket name | `bool` | `false` | no |
