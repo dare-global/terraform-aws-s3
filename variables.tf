@@ -226,6 +226,12 @@ variable "cors_rules" {
   default = []
 }
 
+variable "enable_s3_notification" {
+  description = "Whether to enable S3 bucket notification"
+  type        = bool
+  default     = false
+}
+
 variable "eventbridge" {
   description = "Enable EventBridge notifications"
   type        = bool

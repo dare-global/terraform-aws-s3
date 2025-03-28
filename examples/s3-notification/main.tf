@@ -16,7 +16,8 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name = "sample-test-bucket"
+  bucket_name            = "sample-test-bucket"
+  enable_s3_notification = true
   sqs_notifications = [
     {
       events    = ["s3:ObjectCreated:*"]
