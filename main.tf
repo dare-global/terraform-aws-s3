@@ -247,28 +247,29 @@ resource "aws_s3_bucket_notification" "main" {
 }
 
 resource "aws_s3_access_point" "main" {
-  count = var.enable_access_points ? length(var.access_points) : 0
+  for_each = var.enable_access_points ? { for access_point in var.access_points : access_point.name => access_point } : {}
 
   bucket = var.bucket_name
-  name   = var.access_points[count.index].name
+  name   = each.key
 
   public_access_block_configuration {
-    block_public_acls       = var.access_points[count.index].block_public_acls
-    block_public_policy     = var.access_points[count.index].block_public_policy
-    ignore_public_acls      = var.access_points[count.index].ignore_public_acls
-    restrict_public_buckets = var.access_points[count.index].restrict_public_buckets
+    block_public_acls       = each.value.block_public_acls
+    block_public_policy     = each.value.block_public_policy
+    ignore_public_acls      = each.value.ignore_public_acls
+    restrict_public_buckets = each.value.restrict_public_buckets
   }
 
   dynamic "vpc_configuration" {
-    for_each = try(var.access_points[count.index].vpc_id, null) != null ? [1] : []
+    for_each = try(each.value.vpc_id, null) != null ? [1] : []
     content {
-      vpc_id = var.access_points[count.index].vpc_id
+      vpc_id = each.value.vpc_id
     }
   }
-  policy = try(var.access_points[count.index].policy, null)
+  policy = try(each.value.policy, null)
+
   lifecycle {
     precondition {
-      condition     = var.access_points[count.index].name != null && var.access_points[count.index].name != ""
+      condition     = each.key != null && each.key != ""
       error_message = "Access point name cannot be empty."
     }
   }
