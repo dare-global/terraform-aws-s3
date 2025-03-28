@@ -17,6 +17,7 @@ module "s3_bucket" {
 * [s3-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-bucket/)
 * [s3-website](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-website/)
 * [s3-cors] (https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-cors/)
+* [s3-notification] (https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-notification/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
