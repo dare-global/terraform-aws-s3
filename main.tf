@@ -255,7 +255,7 @@ resource "aws_s3_bucket_replication_configuration" "main" {
 
   depends_on = [aws_s3_bucket_versioning.main]
 
-  bucket = aws_s3_bucket.main.id
+  bucket = aws_s3_bucket.main[count.index].id
   role   = var.replication_configuration.role
 
   dynamic "rule" {
