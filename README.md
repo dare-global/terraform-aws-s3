@@ -19,6 +19,7 @@ module "s3_bucket" {
 * [s3-cors](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-cors/)
 * [s3-notification](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-notification/)
 * [s3-access-point](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-access-point/)
+* [s3-directory-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-directory-bucket/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -55,6 +56,7 @@ No modules.
 | [aws_s3_bucket_server_side_encryption_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_versioning.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
 | [aws_s3_bucket_website_configuration.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) | resource |
+| [aws_s3_directory_bucket.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_directory_bucket) | resource |
 
 ## Inputs
 
@@ -65,11 +67,15 @@ No modules.
 | <a name="input_acl"></a> [acl](#input\_acl) | Canned config to apply to the bucket | `string` | `null` | no |
 | <a name="input_block_public_acls"></a> [block\_public\_acls](#input\_block\_public\_acls) | block public acls for bucket | `bool` | `"true"` | no |
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | block public policy for bucket | `bool` | `"true"` | no |
-| <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Name of the s3 bucket | `string` | n/a | yes |
+| <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Name of the s3 bucket | `string` | `null` | no |
 | <a name="input_bucket_policy"></a> [bucket\_policy](#input\_bucket\_policy) | S3 bucket policy | `string` | `null` | no |
 | <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | Prefix name of the s3 bucket | `string` | `null` | no |
 | <a name="input_configure_policy"></a> [configure\_policy](#input\_configure\_policy) | Whether to define S3 bucket policy | `bool` | `false` | no |
 | <a name="input_cors_rules"></a> [cors\_rules](#input\_cors\_rules) | List of CORS rules for the S3 bucket | <pre>list(object({<br/>    allowed_methods = list(string)<br/>    allowed_origins = list(string)<br/>    allowed_headers = optional(list(string), [])<br/>    expose_headers  = optional(list(string), [])<br/>    max_age_seconds = optional(number)<br/>    id              = optional(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_create_bucket"></a> [create\_bucket](#input\_create\_bucket) | whether to create S3 bucket | `bool` | `true` | no |
+| <a name="input_create_directory_bucket"></a> [create\_directory\_bucket](#input\_create\_directory\_bucket) | Whether to create S3 directory bucket | `bool` | `false` | no |
+| <a name="input_data_redundancy"></a> [data\_redundancy](#input\_data\_redundancy) | Type for data redundancy | `string` | `"SingleAvailabilityZone"` | no |
+| <a name="input_directory_bucket_name"></a> [directory\_bucket\_name](#input\_directory\_bucket\_name) | Name for directory bucket | `string` | `null` | no |
 | <a name="input_enable_access_points"></a> [enable\_access\_points](#input\_enable\_access\_points) | Whether to enable access point for s3 | `bool` | `false` | no |
 | <a name="input_enable_acl"></a> [enable\_acl](#input\_enable\_acl) | Whether to enable ACL for bucket | `bool` | `false` | no |
 | <a name="input_enable_bucket_key"></a> [enable\_bucket\_key](#input\_enable\_bucket\_key) | Enable bucket key | `bool` | `false` | no |
@@ -83,6 +89,8 @@ No modules.
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS key arn to encrypt s3 bucket if sse algorith is aws:kms | `string` | `null` | no |
 | <a name="input_lambda_notifications"></a> [lambda\_notifications](#input\_lambda\_notifications) | List of Lambda function notifications | <pre>list(object({<br/>    lambda_function_arn = string<br/>    events              = list(string)<br/>    filter_prefix       = optional(string)<br/>    filter_suffix       = optional(string)<br/>    id                  = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_lifecycle_rules"></a> [lifecycle\_rules](#input\_lifecycle\_rules) | lifecycle rules for objects transition to different storage classes | <pre>list(object({<br/>    id     = string<br/>    status = string<br/>    prefix = string<br/>    expiration = optional(object({<br/>      days                      = number<br/>      newer_noncurrent_versions = optional(number)<br/>    }))<br/>    transitions = optional(list(object({<br/>      days                      = number<br/>      storage_class             = string<br/>      newer_noncurrent_versions = optional(number)<br/>    })))<br/>  }))</pre> | `[]` | no |
+| <a name="input_location_name"></a> [location\_name](#input\_location\_name) | Name of the Availability Zone ID or Local Zone ID | `string` | `null` | no |
+| <a name="input_location_type"></a> [location\_type](#input\_location\_type) | Location type for S3 directory bucket | `string` | `"AvailabilityZone"` | no |
 | <a name="input_logging_bucket_name"></a> [logging\_bucket\_name](#input\_logging\_bucket\_name) | Destination bucket name to store S3 access logs | `string` | `null` | no |
 | <a name="input_logging_enabled"></a> [logging\_enabled](#input\_logging\_enabled) | Enable logging | `bool` | `false` | no |
 | <a name="input_object_lock_enabled"></a> [object\_lock\_enabled](#input\_object\_lock\_enabled) | Enable object locking in bucket | `bool` | `false` | no |

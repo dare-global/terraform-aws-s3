@@ -1,3 +1,9 @@
+variable "create_bucket" {
+  type        = bool
+  description = "whether to create S3 bucket"
+  default     = true
+}
+
 variable "use_bucket_prefix" {
   type        = bool
   description = "whether to use bucket prefix for the s3 bucket name"
@@ -7,6 +13,7 @@ variable "use_bucket_prefix" {
 variable "bucket_name" {
   type        = string
   description = "Name of the s3 bucket"
+  default     = null
 }
 
 variable "bucket_prefix" {
@@ -292,4 +299,34 @@ variable "access_points" {
     policy                  = optional(string, null)
   }))
   default = []
+}
+
+variable "create_directory_bucket" {
+  description = "Whether to create S3 directory bucket"
+  type        = bool
+  default     = false
+}
+
+variable "directory_bucket_name" {
+  description = "Name for directory bucket"
+  type        = string
+  default     = null
+}
+
+variable "data_redundancy" {
+  description = "Type for data redundancy"
+  type        = string
+  default     = "SingleAvailabilityZone"
+}
+
+variable "location_name" {
+  description = "Name of the Availability Zone ID or Local Zone ID"
+  type        = string
+  default     = null
+}
+
+variable "location_type" {
+  description = "Location type for S3 directory bucket"
+  type        = string
+  default     = "AvailabilityZone"
 }

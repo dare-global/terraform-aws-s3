@@ -1,10 +1,10 @@
 output "bucket_id" {
-  value       = aws_s3_bucket.main.id
+  value       = var.create_bucket ? aws_s3_bucket.main[0].id : null
   description = "The id/name of the created S3 bucket."
 }
 
 output "bucket_arn" {
-  value       = aws_s3_bucket.main.arn
+  value       = var.create_bucket ? aws_s3_bucket.main[0].arn : null
   description = "The Amazon Resource Name (ARN) of the created S3 bucket."
 }
 
