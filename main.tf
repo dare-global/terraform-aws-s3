@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "main" {
+  count         = var.create_bucket ? 1 : 0
   bucket        = var.use_bucket_prefix ? null : var.bucket_name
   bucket_prefix = var.use_bucket_prefix ? var.bucket_prefix : null
 
@@ -8,16 +9,17 @@ resource "aws_s3_bucket" "main" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "main" {
-  bucket = aws_s3_bucket.main.id
+  count  = var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
   rule {
     object_ownership = var.object_ownership
   }
 }
 
 resource "aws_s3_bucket_acl" "main" {
-  count      = var.object_ownership != "BucketOwnerEnforced" && var.enable_acl == true ? 1 : 0
+  count      = var.object_ownership != "BucketOwnerEnforced" && var.enable_acl && var.create_bucket ? 1 : 0
   depends_on = [aws_s3_bucket_ownership_controls.main]
-  bucket     = aws_s3_bucket.main.id
+  bucket     = aws_s3_bucket.main[count.index].id
 
   dynamic "access_control_policy" {
     for_each = var.access_control_policy != null ? [var.access_control_policy] : []
@@ -53,7 +55,8 @@ resource "aws_s3_bucket_acl" "main" {
 }
 
 resource "aws_s3_bucket_public_access_block" "main" {
-  bucket = aws_s3_bucket.main.id
+  count  = var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   block_public_acls       = var.block_public_acls
   block_public_policy     = var.block_public_policy
@@ -62,7 +65,8 @@ resource "aws_s3_bucket_public_access_block" "main" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
-  bucket = aws_s3_bucket.main.id
+  count  = var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -74,8 +78,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
 }
 
 resource "aws_s3_bucket_versioning" "main" {
-  count  = var.versioning == "Enabled" ? 1 : 0
-  bucket = aws_s3_bucket.main.id
+  count  = var.versioning == "Enabled" && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   versioning_configuration {
     status = var.versioning
@@ -83,8 +87,8 @@ resource "aws_s3_bucket_versioning" "main" {
 }
 
 resource "aws_s3_bucket_policy" "main" {
-  count  = var.configure_policy ? 1 : 0
-  bucket = aws_s3_bucket.main.id
+  count  = var.configure_policy && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
   policy = var.bucket_policy
   lifecycle {
     precondition {
@@ -95,10 +99,10 @@ resource "aws_s3_bucket_policy" "main" {
 }
 
 resource "aws_s3_bucket_logging" "main" {
-  count         = var.logging_enabled ? 1 : 0
-  bucket        = aws_s3_bucket.main.id
+  count         = var.logging_enabled && var.create_bucket ? 1 : 0
+  bucket        = aws_s3_bucket.main[count.index].id
   target_bucket = var.logging_bucket_name
-  target_prefix = "${aws_s3_bucket.main.id}/"
+  target_prefix = "${aws_s3_bucket.main[count.index].id}/"
   lifecycle {
     precondition {
       condition     = var.logging_bucket_name != null
@@ -108,8 +112,8 @@ resource "aws_s3_bucket_logging" "main" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "main" {
-  count  = length(var.lifecycle_rules) > 0 ? 1 : 0
-  bucket = aws_s3_bucket.main.id
+  count  = length(var.lifecycle_rules) > 0 && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   dynamic "rule" {
     for_each = var.lifecycle_rules
@@ -142,8 +146,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
 }
 
 resource "aws_s3_bucket_website_configuration" "main" {
-  count  = var.enable_website_configuration ? 1 : 0
-  bucket = aws_s3_bucket.main.id
+  count  = var.enable_website_configuration && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   dynamic "error_document" {
     for_each = var.error_document != null && var.redirect_all_requests_to == null ? [var.error_document] : []
@@ -190,8 +194,8 @@ resource "aws_s3_bucket_website_configuration" "main" {
 }
 
 resource "aws_s3_bucket_cors_configuration" "main" {
-  count  = length(var.cors_rules) > 0 ? 1 : 0
-  bucket = var.bucket_name
+  count  = length(var.cors_rules) > 0 && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   dynamic "cors_rule" {
     for_each = var.cors_rules
@@ -207,8 +211,8 @@ resource "aws_s3_bucket_cors_configuration" "main" {
 }
 
 resource "aws_s3_bucket_notification" "main" {
-  count  = var.enable_s3_notification ? 1 : 0
-  bucket = var.bucket_name
+  count  = var.enable_s3_notification && var.create_bucket ? 1 : 0
+  bucket = aws_s3_bucket.main[count.index].id
 
   eventbridge = var.eventbridge
 
@@ -371,6 +375,64 @@ resource "aws_s3_bucket_replication_configuration" "main" {
           }
         }
       }
+    }
+  }
+}
+
+resource "aws_s3_access_point" "main" {
+  for_each = var.enable_access_points ? { for access_point in var.access_points : access_point.name => access_point } : {}
+
+  bucket = var.bucket_name
+  name   = each.key
+
+  public_access_block_configuration {
+    block_public_acls       = each.value.block_public_acls
+    block_public_policy     = each.value.block_public_policy
+    ignore_public_acls      = each.value.ignore_public_acls
+    restrict_public_buckets = each.value.restrict_public_buckets
+  }
+
+  dynamic "vpc_configuration" {
+    for_each = try(each.value.vpc_id, null) != null ? [1] : []
+    content {
+      vpc_id = each.value.vpc_id
+    }
+  }
+  policy = try(each.value.policy, null)
+
+  lifecycle {
+    precondition {
+      condition     = each.key != null && each.key != ""
+      error_message = "Access point name cannot be empty."
+    }
+  }
+}
+
+resource "aws_s3_directory_bucket" "main" {
+  count           = var.create_directory_bucket ? 1 : 0
+  bucket          = var.directory_bucket_name
+  data_redundancy = var.data_redundancy
+  force_destroy   = var.force_destroy
+
+  location {
+    name = var.location_name
+    type = var.location_type
+  }
+
+  lifecycle {
+    precondition {
+      condition     = can(regex("^[a-zA-Z0-9.-]+--[a-z0-9.-]+--x-s3$", var.directory_bucket_name))
+      error_message = "The bucket name must be in the format [bucket_name]--[azid]--x-s3."
+    }
+
+    precondition {
+      condition     = contains(["SingleAvailabilityZone", "SingleLocalZone"], var.data_redundancy)
+      error_message = "Invalid value for data_redundancy. Allowed values: SingleAvailabilityZone, SingleLocalZone."
+    }
+
+    precondition {
+      condition     = contains(["AvailabilityZone", "LocalZone"], var.location_type)
+      error_message = "Invalid location type. Allowed values: AvailabilityZone, LocalZone."
     }
   }
 }

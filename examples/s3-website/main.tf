@@ -16,7 +16,7 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name                  = "sample-test-bucket-ekjhgfhkjedbfiewgncb"
+  bucket_name                  = "sample-test-bucket"
   enable_website_configuration = true
   index_document               = "index.html"
   # redirect_all_requests_to = {host_name = "abc", protocol = "https"}

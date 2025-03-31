@@ -1,3 +1,9 @@
+variable "create_bucket" {
+  type        = bool
+  description = "whether to create S3 bucket"
+  default     = true
+}
+
 variable "use_bucket_prefix" {
   type        = bool
   description = "whether to use bucket prefix for the s3 bucket name"
@@ -7,6 +13,7 @@ variable "use_bucket_prefix" {
 variable "bucket_name" {
   type        = string
   description = "Name of the s3 bucket"
+  default     = null
 }
 
 variable "bucket_prefix" {
@@ -328,4 +335,54 @@ variable "replication_configuration" {
     }))
   })
   default = null
+}
+
+variable "enable_access_points" {
+  description = "Whether to enable access point for s3"
+  type        = bool
+  default     = false
+}
+
+variable "access_points" {
+  description = "List of S3 access points"
+  type = list(object({
+    name                    = string
+    block_public_acls       = optional(bool, true)
+    block_public_policy     = optional(bool, true)
+    ignore_public_acls      = optional(bool, true)
+    restrict_public_buckets = optional(bool, true)
+    vpc_id                  = optional(string, null)
+    policy                  = optional(string, null)
+  }))
+  default = []
+}
+
+variable "create_directory_bucket" {
+  description = "Whether to create S3 directory bucket"
+  type        = bool
+  default     = false
+}
+
+variable "directory_bucket_name" {
+  description = "Name for directory bucket"
+  type        = string
+  default     = null
+}
+
+variable "data_redundancy" {
+  description = "Type for data redundancy"
+  type        = string
+  default     = "SingleAvailabilityZone"
+}
+
+variable "location_name" {
+  description = "Name of the Availability Zone ID or Local Zone ID"
+  type        = string
+  default     = null
+}
+
+variable "location_type" {
+  description = "Location type for S3 directory bucket"
+  type        = string
+  default     = "AvailabilityZone"
 }
