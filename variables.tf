@@ -282,7 +282,7 @@ variable "sns_notifications" {
 }
 
 variable "replication_configuration" {
-  description = ""
+  description = "Flag to enable Replication Configuration"
   type = object({
     role  = string
     token = optional(string)

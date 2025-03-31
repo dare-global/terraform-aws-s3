@@ -253,7 +253,7 @@ resource "aws_s3_bucket_notification" "main" {
 resource "aws_s3_bucket_replication_configuration" "main" {
   count = var.replication_configuration != null ? 1 : 0
 
-  depends_on = [aws_s3_bucket_versioning.main]
+  depends_on = [aws_s3_bucket_versioning.main[0]]
 
   bucket = aws_s3_bucket.main[count.index].id
   role   = var.replication_configuration.role
