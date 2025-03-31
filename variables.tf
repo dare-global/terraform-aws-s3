@@ -273,3 +273,59 @@ variable "sns_notifications" {
   }))
   default = []
 }
+
+variable "replication_configuration" {
+  description = ""
+  type = object({
+    role  = string
+    token = optional(string)
+    rule = list(object({
+      id       = string
+      status   = string
+      priority = optional(number)
+      filter = optional(object({
+        tag = optional(object({
+          key   = string
+          value = string
+        }))
+        tags   = optional(map(any))
+        prefix = optional(string)
+      }))
+      delete_marker_replication = optional(object({
+        status = string
+      }))
+      destination = object({
+        access_control_translation = optional(object({
+          owner = string
+        }))
+        account = optional(string)
+        bucket  = string
+        encryption_configuration = optional(object({
+          replica_kms_key_id = string
+        }))
+        metrics = optional(object({
+          status = string
+          event_threshold = optional(object({
+            minutes = number
+          }))
+        }))
+        replication_time = optional(object({
+          status = string
+          time = object({
+            minutes = number
+          })
+        }))
+        storage_class = optional(string)
+      })
+      source_selection_criteria = optional(object({
+        replica_modifications = optional(object({
+          status = string
+        }))
+        sse_kms_encrypted_objects = optional(object({
+          status = string
+        }))
+      }))
+    }))
+  })
+  default = null
+}
