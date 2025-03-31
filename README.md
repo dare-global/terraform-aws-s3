@@ -112,6 +112,8 @@ No modules.
 |------|-------------|
 | <a name="output_bucket_arn"></a> [bucket\_arn](#output\_bucket\_arn) | The Amazon Resource Name (ARN) of the created S3 bucket. |
 | <a name="output_bucket_id"></a> [bucket\_id](#output\_bucket\_id) | The id/name of the created S3 bucket. |
+| <a name="output_directory_bucket_arn"></a> [directory\_bucket\_arn](#output\_directory\_bucket\_arn) | The Amazon Resource Name (ARN) of the created S3 directory bucket. |
+| <a name="output_directory_bucket_name"></a> [directory\_bucket\_name](#output\_directory\_bucket\_name) | The id/name of the created S3 directory bucket. |
 | <a name="output_website_domain"></a> [website\_domain](#output\_website\_domain) | The domain of the S3 bucket website |
 | <a name="output_website_endpoint"></a> [website\_endpoint](#output\_website\_endpoint) | The website endpoint of the S3 bucket |
 <!-- END_TF_DOCS -->
