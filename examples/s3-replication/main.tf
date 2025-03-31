@@ -47,7 +47,7 @@ module "s3_bucket" {
         }
 
         destination = {
-          bucket        = "arn:aws:s3:::asset-12042023-dev"
+          bucket        = ""
           storage_class = "STANDARD"
 
           encryption_configuration = {
