@@ -250,6 +250,135 @@ resource "aws_s3_bucket_notification" "main" {
   }
 }
 
+resource "aws_s3_bucket_replication_configuration" "main" {
+  count = var.replication_configuration != null ? 1 : 0
+
+  depends_on = [aws_s3_bucket_versioning.main[0]]
+
+  bucket = aws_s3_bucket.main[count.index].id
+  role   = var.replication_configuration.role
+
+  dynamic "rule" {
+    for_each = var.replication_configuration.rule
+    content {
+      id       = try(rule.value.id, null)
+      status   = rule.value.status
+      priority = try(rule.value.priority, null)
+
+      dynamic "delete_marker_replication" {
+        for_each = try(rule.value.delete_marker_replication, null) != null ? [rule.value.delete_marker_replication] : []
+
+        content {
+          status = delete_marker_replication.value.status
+        }
+      }
+
+      dynamic "source_selection_criteria" {
+        for_each = try(rule.value.source_selection_criteria, null) != null ? [rule.value.source_selection_criteria] : []
+
+        content {
+          dynamic "replica_modifications" {
+            for_each = try(source_selection_criteria.value.replica_modifications, null) != null ? [source_selection_criteria.value.replica_modifications] : []
+            content {
+              status = replica_modifications.value.status
+            }
+          }
+          dynamic "sse_kms_encrypted_objects" {
+            for_each = try(source_selection_criteria.value.sse_kms_encrypted_objects, null) != null ? [source_selection_criteria.value.sse_kms_encrypted_objects] : []
+            content {
+              status = sse_kms_encrypted_objects.value.status
+            }
+          }
+        }
+      }
+
+      # empty filter
+      dynamic "filter" {
+        for_each = rule.value.filter == null ? [true] : []
+        content {}
+      }
+
+      # 1 filter
+      dynamic "filter" {
+        for_each = rule.value.filter != null && try(rule.value.filter.tags, null) == null ? [rule.value.filter] : []
+        content {
+          prefix = try(filter.value.prefix, null)
+
+          dynamic "tag" {
+            for_each = filter.value.tag != null ? [filter.value.tag] : []
+            content {
+              key   = tag.value.key
+              value = tag.value.value
+            }
+          }
+        }
+      }
+
+      dynamic "filter" {
+        for_each = rule.value.filter != null && try(rule.value.filter.tags, null) != null ? [rule.value.filter] : []
+        content {
+          and {
+            prefix = try(filter.value.prefix, null)
+            tags   = try(filter.value.tags, null)
+          }
+        }
+      }
+
+      dynamic "destination" {
+        for_each = try([rule.value.destination], [])
+        content {
+          bucket        = destination.value.bucket
+          storage_class = try(destination.value.storage_class, null)
+          account       = try(destination.value.account, null)
+
+          dynamic "access_control_translation" {
+            for_each = try(destination.value.access_control_translation, null) != null ? [destination.value.access_control_translation] : []
+
+            content {
+              owner = access_control_translation.value.owner
+            }
+          }
+
+          dynamic "encryption_configuration" {
+            for_each = try(destination.value.encryption_configuration, null) != null ? [destination.value.encryption_configuration] : []
+
+            content {
+              replica_kms_key_id = encryption_configuration.value.replica_kms_key_id
+            }
+          }
+
+          dynamic "replication_time" {
+            for_each = try(destination.value.replication_time, null) != null ? [destination.value.replication_time] : []
+
+            content {
+              status = replication_time.value.status
+              time {
+                minutes = replication_time.value.time.minutes
+              }
+            }
+          }
+
+          dynamic "metrics" {
+            for_each = try(destination.value.metrics, null) != null ? [destination.value.metrics] : []
+
+            content {
+              status = metrics.value.status
+
+              dynamic "event_threshold" {
+                for_each = try(metrics.value.event_threshold, null) != null ? [metrics.value.event_threshold] : []
+
+                content {
+                  minutes = event_threshold.value.minutes
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 resource "aws_s3_access_point" "main" {
   for_each = var.enable_access_points ? { for access_point in var.access_points : access_point.name => access_point } : {}
 
