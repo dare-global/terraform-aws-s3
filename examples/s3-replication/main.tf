@@ -16,12 +16,12 @@ provider "aws" {
 module "s3_bucket" {
   source = "../.."
 
-  bucket_name      = "sacdvsdcmp2"
+  bucket_name      = "example"
   versioning       = "Enabled"
   object_ownership = "BucketOwnerEnforced"
 
   replication_configuration = {
-    role = "arn:aws:iam::096445827817:role/s3-replication"
+    role = ""
     rule = [
       {
         id       = "something-with-kms-and-filter"
@@ -43,7 +43,7 @@ module "s3_bucket" {
 
         filter = {
           prefix = "one"
-          tag    = { key = "yo", value = "Yes" }
+          tag    = { key = "yN", value = "Yes" }
         }
 
         destination = {
@@ -51,9 +51,9 @@ module "s3_bucket" {
           storage_class = "STANDARD"
 
           encryption_configuration = {
-            replica_kms_key_id = "arn:aws:kms:eu-west-2:096445827817:key/71340f16-a1cb-4492-96c5-ade535a40d4f"
+            replica_kms_key_id = ""
           }
-          account = "096445827817"
+          account = "000000000000"
 
           access_control_translation = {
             owner = "Destination"
@@ -89,7 +89,7 @@ module "s3_bucket" {
         }
 
         destination = {
-          bucket        = "arn:aws:s3:::asset-12042023-dev"
+          bucket        = ""
           storage_class = "STANDARD"
         }
       },
@@ -107,7 +107,7 @@ module "s3_bucket" {
         }
 
         destination = {
-          bucket        = "arn:aws:s3:::asset-12042023-dev"
+          bucket        = ""
           storage_class = "STANDARD"
         }
       },
@@ -116,7 +116,7 @@ module "s3_bucket" {
         status = "Disabled"
 
         destination = {
-          bucket        = "arn:aws:s3:::asset-12042023-dev"
+          bucket        = ""
           storage_class = "STANDARD"
         }
       },
