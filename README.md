@@ -128,6 +128,7 @@ See LICENSE file for full details.
 
 * [Anish Kumar](https://github.com/anishkumarait)
 * [Marcin Cuber](https://github.com/marcincuber)
+* [Montek Singh](https://github.com/Montek30)
 
 ## Pre-commit hooks
 
