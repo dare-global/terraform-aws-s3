@@ -16,10 +16,10 @@ provider "aws" {
 module "s3_bucket" {
   source = "../.."
 
-  bucket_name      = "example"
-  versioning       = "Enabled"
-  object_ownership = "BucketOwnerEnforced"
-
+  bucket_name                      = "example"
+  versioning                       = "Enabled"
+  object_ownership                 = "BucketOwnerEnforced"
+  enable_replication_configuration = true
   replication_configuration = {
     role = ""
     rule = [

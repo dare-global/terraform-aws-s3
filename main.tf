@@ -251,7 +251,7 @@ resource "aws_s3_bucket_notification" "main" {
 }
 
 resource "aws_s3_bucket_replication_configuration" "main" {
-  count = var.replication_configuration != null ? 1 : 0
+  count = var.enable_replication_configuration ? 1 : 0
 
   depends_on = [aws_s3_bucket_versioning.main[0]]
 

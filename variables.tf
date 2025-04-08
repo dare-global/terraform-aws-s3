@@ -281,6 +281,13 @@ variable "sns_notifications" {
   default = []
 }
 
+
+variable "enable_replication_configuration" {
+  description = "Flag to Enable Replication Configuration"
+  type        = bool
+  default     = false
+}
+
 variable "replication_configuration" {
   description = "Enable Replication Configuration"
   type = object({
