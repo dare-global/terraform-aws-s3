@@ -20,6 +20,7 @@ module "s3_bucket" {
 * [s3-notification](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-notification/)
 * [s3-access-point](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-access-point/)
 * [s3-directory-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-directory-bucket/)
+* [s3-replication](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-replication/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
