@@ -20,6 +20,7 @@ module "s3_bucket" {
 * [s3-notification](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-notification/)
 * [s3-access-point](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-access-point/)
 * [s3-directory-bucket](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-directory-bucket/)
+* [s3-replication](https://github.com/dare-global/terraform-aws-s3/tree/main/examples/s3-replication/)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -80,6 +81,7 @@ No modules.
 | <a name="input_enable_access_points"></a> [enable\_access\_points](#input\_enable\_access\_points) | Whether to enable access point for s3 | `bool` | `false` | no |
 | <a name="input_enable_acl"></a> [enable\_acl](#input\_enable\_acl) | Whether to enable ACL for bucket | `bool` | `false` | no |
 | <a name="input_enable_bucket_key"></a> [enable\_bucket\_key](#input\_enable\_bucket\_key) | Enable bucket key | `bool` | `false` | no |
+| <a name="input_enable_replication_configuration"></a> [enable\_replication\_configuration](#input\_enable\_replication\_configuration) | Flag to Enable Replication Configuration | `bool` | `false` | no |
 | <a name="input_enable_s3_notification"></a> [enable\_s3\_notification](#input\_enable\_s3\_notification) | Whether to enable S3 bucket notification | `bool` | `false` | no |
 | <a name="input_enable_website_configuration"></a> [enable\_website\_configuration](#input\_enable\_website\_configuration) | Whether to enable website configuration for the bucket | `bool` | `false` | no |
 | <a name="input_error_document"></a> [error\_document](#input\_error\_document) | The name of the error document for the website | `string` | `null` | no |
