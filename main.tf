@@ -121,8 +121,13 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
       id     = rule.value.id
       status = rule.value.status
 
-      filter {
-        prefix = rule.value.prefix
+      dynamic "filter" {
+        for_each = rule.value.filter != null ? [rule.value.filter] : []
+        content {
+          prefix                   = filter.value.prefix
+          object_size_greater_than = filter.value.object_size_greater_than
+          object_size_less_than    = filter.value.object_size_less_than
+        }
       }
 
       dynamic "expiration" {

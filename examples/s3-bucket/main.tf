@@ -16,16 +16,18 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name = "sample-test-bucket-kldhfkjsfhgkfdhgsdkj"
-  versioning  = "Enabled"
-  # logging_enabled     = true
-  # logging_bucket_name = "sample-logging-bucket"
-  object_ownership = "BucketOwnerEnforced"
+  bucket_name         = "sample-test-bucket"
+  versioning          = "Enabled"
+  logging_enabled     = true
+  logging_bucket_name = "sample-logging-bucket"
+  object_ownership    = "BucketOwnerEnforced"
   lifecycle_rules = [
     {
       id     = "log"
       status = "Enabled"
-      prefix = "/"
+      filter = {
+        prefix = ""
+      }
       expiration = {
         days = 90
       }
