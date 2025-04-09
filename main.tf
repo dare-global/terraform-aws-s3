@@ -125,18 +125,36 @@ resource "aws_s3_bucket_lifecycle_configuration" "main" {
         prefix = rule.value.prefix
       }
 
-      dynamic "noncurrent_version_expiration" {
+      dynamic "expiration" {
         for_each = rule.value.expiration != null ? [rule.value.expiration] : []
         content {
-          noncurrent_days           = noncurrent_version_expiration.value.days
+          days                         = expiration.value.days
+          date                         = expiration.value.date
+          expired_object_delete_marker = expiration.value.expired_object_delete_marker
+        }
+      }
+
+      dynamic "transition" {
+        for_each = rule.value.transition != null ? rule.value.transition : []
+        content {
+          days          = transition.value.days
+          date          = transition.value.date
+          storage_class = transition.value.storage_class
+        }
+      }
+
+      dynamic "noncurrent_version_expiration" {
+        for_each = rule.value.noncurrent_version_expiration != null ? [rule.value.noncurrent_version_expiration] : []
+        content {
+          noncurrent_days           = noncurrent_version_expiration.value.noncurrent_days
           newer_noncurrent_versions = noncurrent_version_expiration.value.newer_noncurrent_versions
         }
       }
 
       dynamic "noncurrent_version_transition" {
-        for_each = rule.value.transitions != null ? rule.value.transitions : []
+        for_each = rule.value.noncurrent_version_transition != null ? rule.value.noncurrent_version_transition : []
         content {
-          noncurrent_days           = noncurrent_version_transition.value.days
+          noncurrent_days           = noncurrent_version_transition.value.noncurrent_days
           storage_class             = noncurrent_version_transition.value.storage_class
           newer_noncurrent_versions = noncurrent_version_transition.value.newer_noncurrent_versions
         }

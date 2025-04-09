@@ -16,23 +16,29 @@ provider "aws" {
 module "s3_bucket" {
   source = "../../"
 
-  bucket_name         = "sample-test-bucket"
-  versioning          = "Enabled"
-  logging_enabled     = true
-  logging_bucket_name = "sample-logging-bucket"
-  object_ownership    = "BucketOwnerEnforced"
+  bucket_name = "sample-test-bucket-kldhfkjsfhgkfdhgsdkj"
+  versioning  = "Enabled"
+  # logging_enabled     = true
+  # logging_bucket_name = "sample-logging-bucket"
+  object_ownership = "BucketOwnerEnforced"
   lifecycle_rules = [
     {
       id     = "log"
       status = "Enabled"
       prefix = "/"
       expiration = {
-        days                      = 90
-        newer_noncurrent_versions = 10
+        days = 90
       }
-      transitions = [
-        { days = 30, storage_class = "STANDARD_IA" },
-        { days = 60, storage_class = "GLACIER" }
+      transition = [{
+        days          = 30
+        storage_class = "STANDARD_IA"
+      }]
+      noncurrent_version_expiration = {
+        noncurrent_days           = 60
+        newer_noncurrent_versions = 30
+      }
+      noncurrent_version_transition = [
+        { noncurrent_days = 30, storage_class = "STANDARD_IA" },
       ]
     }
   ]
