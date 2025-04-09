@@ -154,7 +154,11 @@ variable "lifecycle_rules" {
   type = list(object({
     id     = string
     status = string
-    prefix = string
+    filter = optional(object({
+      object_size_greater_than = optional(string)
+      object_size_less_than    = optional(string)
+      prefix                   = optional(string)
+    }))
     expiration = optional(object({
       days                         = optional(number)
       date                         = optional(string)
