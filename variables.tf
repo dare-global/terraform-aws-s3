@@ -156,11 +156,21 @@ variable "lifecycle_rules" {
     status = string
     prefix = string
     expiration = optional(object({
-      days                      = number
+      days                         = optional(number)
+      date                         = optional(string)
+      expired_object_delete_marker = optional(bool)
+    }))
+    transition = optional(list(object({
+      days          = optional(number)
+      date          = optional(string)
+      storage_class = string
+    })))
+    noncurrent_version_expiration = optional(object({
+      noncurrent_days           = number
       newer_noncurrent_versions = optional(number)
     }))
-    transitions = optional(list(object({
-      days                      = number
+    noncurrent_version_transition = optional(list(object({
+      noncurrent_days           = number
       storage_class             = string
       newer_noncurrent_versions = optional(number)
     })))
