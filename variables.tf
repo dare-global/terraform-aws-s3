@@ -374,6 +374,7 @@ variable "access_points" {
     restrict_public_buckets = optional(bool, true)
     vpc_id                  = optional(string, null)
     policy                  = optional(string, null)
+    tags                    = optional(map(string), null)
   }))
   default = []
 }

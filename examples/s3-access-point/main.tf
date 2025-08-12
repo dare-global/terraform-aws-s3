@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.90.0"
+      version = ">= 6.0"
     }
   }
 }
@@ -20,7 +20,10 @@ module "s3_bucket" {
   enable_access_points = true
   access_points = [
     {
-      name                    = "sample-test"
+      name = "sample-test"
+      tags = {
+        "test" = "abc"
+      }
       block_public_acls       = false
       block_public_policy     = true
       ignore_public_acls      = false

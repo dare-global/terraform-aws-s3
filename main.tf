@@ -423,6 +423,8 @@ resource "aws_s3_access_point" "main" {
   }
   policy = try(each.value.policy, null)
 
+  tags = try(each.value.tags, null)
+
   lifecycle {
     precondition {
       condition     = each.key != null && each.key != ""
